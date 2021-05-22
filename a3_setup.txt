@@ -1,0 +1,3 @@
+- compile with -no-pie since libRK4.a was not compiled with the -fPIE flag. You could re-compile libRK4.a if you have the source code.
+ ie. CFLAGS    = -g -Wall -ansi -no-pie
+- Remove the -ansi flag, it uses C++ 99, which doesn't even allow `auto`
