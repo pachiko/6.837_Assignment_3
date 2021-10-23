@@ -134,6 +134,14 @@ namespace
             }
             break;
         }
+        case 'w': {
+            try {
+                ClothSystem* cloth = dynamic_cast<ClothSystem*>(system);
+                cloth->wireMesh = !(cloth->wireMesh);
+            } catch(...) {
+            }
+            break;
+        }
         default:
             cout << "Unhandled key press " << key << "." << endl;        
         }

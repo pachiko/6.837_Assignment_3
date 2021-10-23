@@ -4,6 +4,7 @@
 ClothSystem::ClothSystem(int w, int h)  : w(w), h(h) {
 	m_numParticles = w*h;
 	sweepMovement = false;
+	wireMesh = false;
 	ccw = true;
 	angle = 0.f;
 }
@@ -73,8 +74,12 @@ void ClothSystem::updateVelocity(int idx, Vector3f& velocity) {
 
 void ClothSystem::draw()
 {
-    PendulumSystem::draw();
-	drawLines();
+	if (wireMesh) {
+    	PendulumSystem::draw();
+		drawLines();
+	} else {
+		drawTriangles();
+	}
 }
 
 void ClothSystem::drawLines() {
@@ -95,6 +100,97 @@ void ClothSystem::drawLines() {
 	}
 	glEnd();
 	glPopAttrib();
+}
+
+void ClothSystem::drawTriangles() {
+	vector<Vector3f> st = getState();
+	vector<Vector3f> normals((w - 1)*(h - 1), Vector3f::ZERO);
+
+	glPushAttrib( GL_ALL_ATTRIB_BITS );
+	glEnable(GL_LIGHTING);
+	glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, 1);
+	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	glDisable(GL_CULL_FACE);
+	glBegin(GL_TRIANGLES);
+	for (int r = 0; r < h - 1; r++) {
+		for (int c = 0; c < w - 1; c++) {  // Draw per quad
+			// Indices
+			int topLeft = r*w + c;
+			int topRight = topLeft + 1;
+			int botLeft = (r + 1)*w + c;
+			int botRight = botLeft + 1;
+
+			// Normals
+			Vector3f nTopLeft = calcNormal(r, c, st, normals);
+			Vector3f nTopRight = calcNormal(r, c + 1, st, normals);
+			Vector3f nBotLeft = calcNormal(r + 1, c, st, normals);
+			Vector3f nBotRight = calcNormal(r + 1, c + 1, st, normals);
+
+			// Vertices
+			Vector3f pTopLeft = st[2*topLeft];
+			Vector3f pTopRight = st[2*topRight];
+			Vector3f pBotLeft = st[2*botLeft];
+			Vector3f pBotRight = st[2*botRight];
+
+			glNormal3fv(nTopLeft);
+			glVertex3fv(pTopLeft);
+
+			glNormal3fv(nBotRight);
+			glVertex3fv(pBotRight);
+
+			glNormal3fv(nTopRight);
+			glVertex3fv(pTopRight);
+
+			glNormal3fv(nTopLeft);
+			glVertex3fv(pTopLeft);
+
+			glNormal3fv(nBotLeft);
+			glVertex3fv(pBotLeft);
+
+			glNormal3fv(nBotRight);			
+			glVertex3fv(pBotRight);
+		}
+	}
+	glEnd();
+	glPopAttrib();
+}
+
+Vector3f ClothSystem::calcNormal(int r, int c, const vector<Vector3f>& st, vector<Vector3f>& normals) {
+	Vector3f n;
+	Vector3f p = st[2*(r*w + c)];
+
+	bool hasLeft = c > 0; // cached
+	bool hasRight = c < w - 1;  // calculated (then cached)
+
+	bool hasTop = r > 0;
+	bool hasBot = r < h - 1;
+
+	if (hasRight) {
+		Vector3f right = st[2*(r*w + c + 1)];
+		if (hasTop) {
+			Vector3f top = st[2*((r - 1)*w + c)];
+			Vector3f northEast = Vector3f::cross(right - p, top - p).normalized();
+			n += northEast;
+			normals[(r - 1)*(w - 1) + c] = northEast;
+		}
+		if (hasBot) {
+			Vector3f bot = st[2*((r + 1)*w + c)];
+			Vector3f southEast = Vector3f::cross(bot - p, right - p).normalized();
+			n += southEast;
+			normals[r*(w - 1) + c] = southEast;
+		}
+	}
+
+	if (hasLeft) {
+		if (hasTop) {
+			n += normals[(r - 1)*(w - 1) + (c - 1)];
+		}
+		if (hasBot) {
+			n += normals[r*(w - 1) + (c - 1)];
+		}
+	}
+
+	return n.normalized();
 }
 
 void ClothSystem::sweepFixedPoints(float h) {

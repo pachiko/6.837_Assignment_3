@@ -21,6 +21,8 @@ public:
 
 	bool sweepMovement;
 
+	bool wireMesh;
+
 	// Move fixed points
 	virtual void sweepFixedPoints(float h);
 
@@ -51,6 +53,12 @@ protected:
 
 	// draw lines for springs
 	void drawLines();
+
+	// draw triangle mesh
+	void drawTriangles();
+
+	// Calculate normal
+	Vector3f calcNormal(int r, int c, const vector<Vector3f>& st, vector<Vector3f>& normals);
 };
 
 
