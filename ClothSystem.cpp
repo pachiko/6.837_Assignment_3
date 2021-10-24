@@ -5,6 +5,7 @@ ClothSystem::ClothSystem(int w, int h)  : w(w), h(h) {
 	m_numParticles = w*h;
 	sweepMovement = false;
 	wireMesh = false;
+	visNormals = false;
 	ccw = true;
 	angle = 0.f;
 }
@@ -83,11 +84,11 @@ void ClothSystem::draw()
 }
 
 void ClothSystem::drawLines() {
-	glPushAttrib( GL_ALL_ATTRIB_BITS );
-	glDisable( GL_LIGHTING ); 
-	glColor4f( 1, 1, 1, 1 );
-	glLineWidth( 1 );
-	glBegin( GL_LINES);
+	glPushAttrib(GL_ALL_ATTRIB_BITS);
+	glDisable(GL_LIGHTING); 
+	glColor4f(1, 1, 1, 1);
+	glLineWidth(1);
+	glBegin(GL_LINES);
 	for (auto spring: springCollection) {
 		if (spring.isFlex) continue;
 		int p1 = spring.p1;
@@ -104,14 +105,14 @@ void ClothSystem::drawLines() {
 
 void ClothSystem::drawTriangles() {
 	vector<Vector3f> st = getState();
-	vector<Vector3f> normals((w - 1)*(h - 1), Vector3f::ZERO);
+	vector<Vector3f> normals((w - 1)*(h - 1), Vector3f::ZERO); // normals of a quad
 
-	glPushAttrib( GL_ALL_ATTRIB_BITS );
+	glPushAttrib(GL_ALL_ATTRIB_BITS);
 	glEnable(GL_LIGHTING);
 	glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, 1);
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	glDisable(GL_CULL_FACE);
-	glBegin(GL_TRIANGLES);
+	
 	for (int r = 0; r < h - 1; r++) {
 		for (int c = 0; c < w - 1; c++) {  // Draw per quad
 			// Indices
@@ -132,26 +133,34 @@ void ClothSystem::drawTriangles() {
 			Vector3f pBotLeft = st[2*botLeft];
 			Vector3f pBotRight = st[2*botRight];
 
-			glNormal3fv(nTopLeft);
-			glVertex3fv(pTopLeft);
+			glBegin(GL_TRIANGLES);
+			glNormal3fv(nTopLeft); glVertex3fv(pTopLeft);
+			glNormal3fv(nBotRight); glVertex3fv(pBotRight);
+			glNormal3fv(nTopRight); glVertex3fv(pTopRight);
+			
+			glNormal3fv(nTopLeft); glVertex3fv(pTopLeft);
+			glNormal3fv(nBotLeft); glVertex3fv(pBotLeft);
+			glNormal3fv(nBotRight);	glVertex3fv(pBotRight);
+			glEnd();
 
-			glNormal3fv(nBotRight);
-			glVertex3fv(pBotRight);
+			if (visNormals) {
+				glPushAttrib(GL_ALL_ATTRIB_BITS);
+				glDisable(GL_LIGHTING);
+				glColor3d(0, 1, 0);
+				glLineWidth(2);
+				glBegin(GL_LINES);
 
-			glNormal3fv(nTopRight);
-			glVertex3fv(pTopRight);
+				if (r == 0 && c == 0) { glVertex3fv(pTopLeft); glVertex3fv(pTopLeft + nTopLeft); }
+				if (r == 0) { glVertex3fv(pTopRight); glVertex3fv(pTopRight + nTopRight); }
+				if (c == 0) { glVertex3fv(pBotLeft); glVertex3fv(pBotLeft + nBotLeft); }
+				glVertex3fv(pBotRight); glVertex3fv(pBotRight + nBotRight);
 
-			glNormal3fv(nTopLeft);
-			glVertex3fv(pTopLeft);
-
-			glNormal3fv(nBotLeft);
-			glVertex3fv(pBotLeft);
-
-			glNormal3fv(nBotRight);			
-			glVertex3fv(pBotRight);
+				glEnd();
+				glPopAttrib();
+			}
 		}
 	}
-	glEnd();
+
 	glPopAttrib();
 }
 
@@ -159,21 +168,18 @@ Vector3f ClothSystem::calcNormal(int r, int c, const vector<Vector3f>& st, vecto
 	Vector3f n;
 	Vector3f p = st[2*(r*w + c)];
 
-	bool hasLeft = c > 0; // cached
-	bool hasRight = c < w - 1;  // calculated (then cached)
+	bool hasLeft = c > 0;
+	bool hasRight = c < w - 1;
 
 	bool hasTop = r > 0;
 	bool hasBot = r < h - 1;
 
 	if (hasRight) {
-		Vector3f right = st[2*(r*w + c + 1)];
 		if (hasTop) {
-			Vector3f top = st[2*((r - 1)*w + c)];
-			Vector3f northEast = Vector3f::cross(right - p, top - p).normalized();
-			n += northEast;
-			normals[(r - 1)*(w - 1) + c] = northEast;
+			n += normals[(r - 1)*(w - 1) + c];
 		}
 		if (hasBot) {
+			Vector3f right = st[2*(r*w + c + 1)];
 			Vector3f bot = st[2*((r + 1)*w + c)];
 			Vector3f southEast = Vector3f::cross(bot - p, right - p).normalized();
 			n += southEast;

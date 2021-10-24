@@ -23,6 +23,8 @@ public:
 
 	bool wireMesh;
 
+	bool visNormals;
+
 	// Move fixed points
 	virtual void sweepFixedPoints(float h);
 
