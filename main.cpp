@@ -18,6 +18,7 @@
 #include "simpleSystem.h"
 #include "pendulumSystem.h"
 #include "clothSystem.h"
+#include "obstacle.h"
 
 using namespace std;
 
@@ -27,6 +28,7 @@ namespace
 
     ParticleSystem *system;
     TimeStepper * timeStepper;
+    Obstacle* obstacle;
 
   // initialize your particle systems
   ///TODO: read argv here. set timestepper , step size etc
@@ -39,6 +41,8 @@ namespace
     system = new ClothSystem(8, 8);
     system->initState();
     timeStepper = new RK4();		
+    obstacle = new Sphere(4.f*Vector3f::RIGHT - Vector3f::FORWARD, 3.0f);
+
   }
 
   // Take a step forward for the particle shower
@@ -57,7 +61,9 @@ namespace
                 cloth->sweepFixedPoints(h);
             }
         } catch(...) {
+            std::cout << "Failed to cast system" << std::endl;
         }
+        obstacle->collides(system);
     }
   }
 
@@ -68,6 +74,7 @@ namespace
     // Base material colors (they don't change)
     GLfloat particleColor[] = {0.4f, 0.7f, 1.0f, 1.0f};
     GLfloat floorColor[] = {1.0f, 0.0f, 0.0f, 1.0f};
+    GLfloat obstacleColor[] = {1.0f, 1.0f, 1.0f, 1.0f};
     
     glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, particleColor);
     
@@ -75,6 +82,8 @@ namespace
     
     system->draw();
     
+    glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, obstacleColor);
+    obstacle->draw();
     
     glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, floorColor);
     glPushMatrix();
@@ -84,7 +93,6 @@ namespace
     glPopMatrix();
     
   }
-        
 
     //-------------------------------------------------------------------
     
@@ -259,7 +267,6 @@ namespace
         glLoadMatrixf( camera.viewMatrix() );
 
         // THIS IS WHERE THE DRAW CODE GOES.
-
         drawSystem();
 
         // This draws the coordinate axes when you're rotating, to
