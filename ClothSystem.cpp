@@ -175,11 +175,15 @@ Vector3f ClothSystem::calcNormal(int r, int c, const vector<Vector3f>& st, vecto
 	bool hasBot = r < h - 1;
 
 	if (hasRight) {
+		Vector3f right = st[2*(r*w + c + 1)];
 		if (hasTop) {
 			n += normals[(r - 1)*(w - 1) + c];
+
+			// Vector3f top = st[2*((r - 1)*w + c)];
+			// Vector3f northEast = Vector3f::cross(right - p, top - p).normalized();
+			// n += northEast;
 		}
 		if (hasBot) {
-			Vector3f right = st[2*(r*w + c + 1)];
 			Vector3f bot = st[2*((r + 1)*w + c)];
 			Vector3f southEast = Vector3f::cross(bot - p, right - p).normalized();
 			n += southEast;
@@ -188,11 +192,20 @@ Vector3f ClothSystem::calcNormal(int r, int c, const vector<Vector3f>& st, vecto
 	}
 
 	if (hasLeft) {
+		Vector3f left = st[2*(r*w + c - 1)];
 		if (hasTop) {
 			n += normals[(r - 1)*(w - 1) + (c - 1)];
+
+			// Vector3f top = st[2*((r - 1)*w + c)];
+			// Vector3f northWest = Vector3f::cross(top - p, left - p).normalized();
+			// n += northWest;
 		}
 		if (hasBot) {
 			n += normals[r*(w - 1) + (c - 1)];
+
+			// Vector3f bot = st[2*((r + 1)*w + c)];
+			// Vector3f southWest = Vector3f::cross(left - p, bot - p).normalized();
+			// n += southWest;
 		}
 	}
 
