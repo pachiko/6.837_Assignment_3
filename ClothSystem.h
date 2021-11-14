@@ -28,8 +28,14 @@ public:
 	// Move fixed points
 	virtual void sweepFixedPoints(float h);
 
+	const vector<Vector3f> &getTriIndices() { return indices; }
+
 protected:
 	int w, h;
+
+	// Indices of particles forming each triangle (CCW)
+	// Mainly for picking
+	vector<Vector3f> indices;
 
 	// CCW rotation?
 	bool ccw;

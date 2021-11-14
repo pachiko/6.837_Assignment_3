@@ -49,7 +49,11 @@ public:
     Vector3f GetCenter() const { return mCurrentCenter; }
     Matrix4f GetRotation() const { return mCurrentRot; }
     float GetDistance() const { return mCurrentDistance; }
-    
+    const int* const GetDimensions() { return mDimensions; }
+    const int* const GetViewPort() { return mViewport; }
+    const int* const GetStartClick() { return mStartClick; }
+    const float* const GetPerspective() { return mPerspective; }
+
 private:
 
     // States 

@@ -31,10 +31,11 @@ struct Spring {
 struct ParticleInfo {
 	float mass;
 	float dragConstant;
+	Vector3f externalForce;
 
 	// mass of a tennis ball around 60g
-	ParticleInfo(float mass=0.1f, float dragConstant=0.1f) :
-	mass(mass), dragConstant(dragConstant) {
+	ParticleInfo(float mass=0.1f, float dragConstant=0.1f, Vector3f force=Vector3f::ZERO) :
+	mass(mass), dragConstant(dragConstant), externalForce(force) {
 	}
 };
 
@@ -48,6 +49,8 @@ public:
 	void initState();    // overrides ParticleSystem::initState
 	
 	virtual void draw();
+
+	vector<ParticleInfo> getParticleInfos(){ return particleInfos; };
 
 protected:
 	// NB: Whatever methods that need to be implemented in derived classes should be virtual

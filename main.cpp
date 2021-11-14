@@ -19,6 +19,7 @@
 #include "pendulumSystem.h"
 #include "clothSystem.h"
 #include "obstacle.h"
+#include "picker.h"
 
 using namespace std;
 
@@ -28,7 +29,8 @@ namespace
 
     ParticleSystem *system;
     TimeStepper * timeStepper;
-    Obstacle* obstacle;
+    // Obstacle* obstacle;
+    ClothPicker* picker;
 
   // initialize your particle systems
   ///TODO: read argv here. set timestepper , step size etc
@@ -41,8 +43,8 @@ namespace
     system = new ClothSystem(8, 8);
     system->initState();
     timeStepper = new RK4();		
-    obstacle = new Sphere(4.f*Vector3f::RIGHT - Vector3f::FORWARD, 3.0f);
-
+    // obstacle = new Sphere(4.f*Vector3f::RIGHT - Vector3f::FORWARD, 3.0f);
+    picker = new ClothPicker();
   }
 
   // Take a step forward for the particle shower
@@ -63,7 +65,7 @@ namespace
         } catch(...) {
             std::cout << "Failed to cast system" << std::endl;
         }
-        obstacle->collides(system);
+        // obstacle->collides(system);
     }
   }
 
@@ -83,7 +85,7 @@ namespace
     system->draw();
     
     glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, obstacleColor);
-    obstacle->draw();
+    // obstacle->draw();
     
     glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, floorColor);
     glPushMatrix();
@@ -186,6 +188,13 @@ namespace
             switch (button)
             {
             case GLUT_LEFT_BUTTON:
+                if (!picker->hasPicked()) {
+                    try {
+                        ClothSystem* cloth = dynamic_cast<ClothSystem*>(system);
+                        if (picker->tryPick(camera, *cloth, x, y)) break;
+                    } catch(...) {
+                    }
+                }
                 camera.MouseClick(Camera::LEFT, x, y);
                 break;
             case GLUT_MIDDLE_BUTTON:
@@ -199,6 +208,13 @@ namespace
         }
         else
         {
+            if (picker->hasPicked()) {
+                try {
+                    ClothSystem* cloth = dynamic_cast<ClothSystem*>(system);
+                    picker->resetPicking(*cloth);
+                } catch(...) {
+                }
+            }
             camera.MouseRelease(x,y);
             g_mousePressed = false;
         }
@@ -208,7 +224,15 @@ namespace
     // Called when mouse is moved while button pressed.
     void motionFunc(int x, int y)
     {
-        camera.MouseDrag(x,y);        
+        if (picker->hasPicked()) {
+            try {
+                ClothSystem* cloth = dynamic_cast<ClothSystem*>(system);
+                picker->update(camera, *cloth, x, y);
+            } catch(...) {
+            }
+        } else {
+            camera.MouseDrag(x,y);
+        }
     
         glutPostRedisplay();
     }
@@ -301,7 +325,9 @@ namespace
             glPopAttrib();
             glPopMatrix();
         }
-                 
+
+        picker->drawInfo();
+
         // Dump the image to the screen.
         glutSwapBuffers();
     }
