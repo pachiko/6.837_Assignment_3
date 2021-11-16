@@ -4,7 +4,7 @@
 ClothSystem::ClothSystem(int w, int h)  : w(w), h(h) {
 	m_numParticles = w*h;
 	sweepMovement = false;
-	wireMesh = true;
+	wireMesh = false;
 	visNormals = false;
 	ccw = true;
 	angle = 0.f;

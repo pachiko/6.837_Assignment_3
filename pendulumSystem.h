@@ -50,8 +50,9 @@ public:
 	
 	virtual void draw();
 
-	vector<ParticleInfo> getParticleInfos(){ return particleInfos; };
-
+	// make sure the receiver is reference if you want to edit
+	vector<ParticleInfo>& getParticleInfos(){ return particleInfos; }; 
+	
 protected:
 	// NB: Whatever methods that need to be implemented in derived classes should be virtual
 	// because main.cpp uses a pointer to a ParticleSystem (the base class) to hold the current system.

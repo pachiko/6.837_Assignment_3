@@ -44,7 +44,7 @@ namespace
     system->initState();
     timeStepper = new RK4();		
     // obstacle = new Sphere(4.f*Vector3f::RIGHT - Vector3f::FORWARD, 3.0f);
-    picker = new ClothPicker();
+    picker = new ClothPicker(2.5f);
   }
 
   // Take a step forward for the particle shower
@@ -326,7 +326,7 @@ namespace
             glPopMatrix();
         }
 
-        picker->drawInfo();
+        // picker->drawInfo(); // Debug ray picks
 
         // Dump the image to the screen.
         glutSwapBuffers();

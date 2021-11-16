@@ -30,7 +30,7 @@ private:
     // Pick information
     PickInfo info;
 
-    // Dragging strength. Multiplied with drag displacement unit vector
+    // Dragging strength. Multiplied with drag displacement vector
     float strength;
 
 };

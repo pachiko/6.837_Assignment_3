@@ -49,10 +49,15 @@ public:
     Vector3f GetCenter() const { return mCurrentCenter; }
     Matrix4f GetRotation() const { return mCurrentRot; }
     float GetDistance() const { return mCurrentDistance; }
-    const int* const GetDimensions() { return mDimensions; }
-    const int* const GetViewPort() { return mViewport; }
-    const int* const GetStartClick() { return mStartClick; }
-    const float* const GetPerspective() { return mPerspective; }
+
+    // Camera should handle it within
+    // const int* const GetDimensions() { return mDimensions; }
+    // const int* const GetViewPort() { return mViewport; }
+    // const int* const GetStartClick() { return mStartClick; }
+    // const float* const GetPerspective() { return mPerspective; }
+
+    // Get pixel direction vector in camera space
+    Vector3f pixelDirection(int x, int y);
 
 private:
 

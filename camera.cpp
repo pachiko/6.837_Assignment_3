@@ -259,3 +259,26 @@ void Camera::DistanceZoom(int x, int y)
     // exponential zoom factor
     mCurrentDistance = mStartDistance * exp(delta);  
 }
+
+// Vector to pixel x, y in camera space
+Vector3f Camera::pixelDirection(int x, int y) {
+    // compute "distance" of image plane (wrt projection matrix)
+    // IMAGE PLANE IS NOT NEAR PLANE! so d != nearZ
+    float d = -float(mViewport[3])/2.0f / tan(mPerspective[0]*M_PI / 180.0f / 2.0f);
+    
+    // viewPort is starting from (0, 0) in our case
+    int cx = x - mViewport[0];
+    int cy = y - mViewport[1];
+    float cr = cx - mViewport[2]/2.0f + 0.5f; // (x - w/2)
+    float cu = -(cy - mViewport[3]/2.0f) + 0.5f; // -(y - h/2)
+    return Vector3f(cr, cu, d);
+
+    /* Long Way */
+    // float fx = (2.0f * x) / mViewport[2] - 1.0f;
+    // float fy = 1.0f - (2.0f * y) / mViewport[3];
+    // Vector2f ray_nds(fx, fy);
+    // Vector4f ray_clip(ray_nds, -1.0f, 1.0f);
+    // Matrix4f invProj = projectionMatrix().inverse();
+    // Vector4f ray_eye = invProj * ray_clip;
+    // ray_eye = Vector4f(ray_eye.xy(), -1.0, 0.0);
+}
