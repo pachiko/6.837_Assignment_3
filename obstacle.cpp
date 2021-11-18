@@ -7,12 +7,36 @@ Sphere::Sphere(Vector3f pos, float r) : pos(pos), r(r) {
 	r_sqr = (r + eps)*(r + eps);
 }
 
+
+bool Sphere::intersect(const Ray& ray, PickInfo& info, float tmin) {
+	bool res = false;
+
+	Vector3f o_c = ray.getOrigin() - pos; // o - c
+	float dTo_c = Vector3f::dot(ray.getDirection(), o_c); // d.(o - c)
+	float det = dTo_c*dTo_c - (Vector3f::dot(o_c, o_c) - r*r); // b^2 - 4ac
+
+	if (det < 0.f) return res; // cant sqrt negative
+	det = sqrt(det);
+
+	float tNear = (-dTo_c - det); // dTd = 1
+	float tFar = (-dTo_c + det); // dTd = 1
+	if (tNear < info.t && tNear > tmin) {
+		res = true;
+		info.t = tNear;
+		info.pos = ray.pointAtParameter(tNear);
+	}
+
+	return res;
+}
+
+
 void Sphere::draw() {
 	glPushMatrix();
 	glTranslatef(pos[0], pos[1], pos[2]);
 	glutSolidSphere(r, r*10.0f, r*10.0f);
 	glPopMatrix();
 }
+
 
 bool Sphere::collides(ParticleSystem* particleSystem) {
 	bool res = false;

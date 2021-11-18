@@ -1,6 +1,8 @@
 #include "camera.h"
 #include "ClothSystem.h"
 #include "pickInfo.h"
+#include "obstacle.h"
+
 
 // Cloth Picker.
 class ClothPicker {
@@ -13,7 +15,7 @@ public:
     bool hasPicked() { return picked; }
 
     // Try to pick. True if successful.
-    bool tryPick(Camera& cam, ClothSystem& cloth, int x, int y);
+    bool tryPick(Camera& cam, ClothSystem& cloth, Obstacle& obstacle, int x, int y);
 
     // Update drag force. Done before stepping?
     void update(Camera& cam, ClothSystem& cloth, int x, int y);

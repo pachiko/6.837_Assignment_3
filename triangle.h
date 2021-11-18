@@ -20,7 +20,7 @@ public:
           this->idx = idx;
 	}
 
-	virtual bool intersect( const Ray& ray,  PickInfo& info , float tmin){
+	bool intersect(const Ray& ray, PickInfo& info, float tmin) {
 		//  Moller-Trumbore
 
 		Vector3f s = ray.getOrigin() - a;

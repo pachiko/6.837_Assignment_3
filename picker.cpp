@@ -3,9 +3,8 @@
 #include "triangle.h"
 
 
-bool ClothPicker::tryPick(Camera& cam, ClothSystem& cloth, int x, int y) {
+bool ClothPicker::tryPick(Camera& cam, ClothSystem& cloth, Obstacle& obstacle, int x, int y) {
     // x is positive to the right, y is positive downwards
-
     Matrix4f invView = cam.viewMatrix().inverse();
 
     // Vector3f o = cam.GetCenter(); // DONT USE, doesnt get moved by rots and zooms
@@ -16,6 +15,14 @@ bool ClothPicker::tryPick(Camera& cam, ClothSystem& cloth, int x, int y) {
     Ray r(o, dir);
     info.o = o;
     info.dir = dir;
+
+    try {
+    // Intersect with sphere first.
+    // All subsequent triangles need to be in front to be valid.
+        Sphere& sphere = dynamic_cast<Sphere&>(obstacle);
+        sphere.intersect(r, info, 0.f);
+    } catch(...) {
+    }
 
     // Return value and index counter
     bool res = false;

@@ -29,7 +29,7 @@ namespace
 
     ParticleSystem *system;
     TimeStepper * timeStepper;
-    // Obstacle* obstacle;
+    Obstacle* obstacle;
     ClothPicker* picker;
 
   // initialize your particle systems
@@ -43,7 +43,7 @@ namespace
     system = new ClothSystem(8, 8);
     system->initState();
     timeStepper = new RK4();		
-    // obstacle = new Sphere(4.f*Vector3f::RIGHT - Vector3f::FORWARD, 3.0f);
+    obstacle = new Sphere(4.f*Vector3f::RIGHT - Vector3f::FORWARD, 3.0f);
     picker = new ClothPicker(2.5f);
   }
 
@@ -65,7 +65,7 @@ namespace
         } catch(...) {
             std::cout << "Failed to cast system" << std::endl;
         }
-        // obstacle->collides(system);
+        obstacle->collides(system);
     }
   }
 
@@ -85,7 +85,7 @@ namespace
     system->draw();
     
     glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, obstacleColor);
-    // obstacle->draw();
+    obstacle->draw();
     
     glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, floorColor);
     glPushMatrix();
@@ -188,12 +188,10 @@ namespace
             switch (button)
             {
             case GLUT_LEFT_BUTTON:
-                if (!picker->hasPicked()) {
-                    try {
-                        ClothSystem* cloth = dynamic_cast<ClothSystem*>(system);
-                        if (picker->tryPick(camera, *cloth, x, y)) break;
-                    } catch(...) {
-                    }
+                try {
+                    ClothSystem* cloth = dynamic_cast<ClothSystem*>(system);
+                    if (picker->tryPick(camera, *cloth, *obstacle, x, y)) break;
+                } catch(...) {
                 }
                 camera.MouseClick(Camera::LEFT, x, y);
                 break;
@@ -208,13 +206,12 @@ namespace
         }
         else
         {
-            if (picker->hasPicked()) {
-                try {
-                    ClothSystem* cloth = dynamic_cast<ClothSystem*>(system);
-                    picker->resetPicking(*cloth);
-                } catch(...) {
-                }
+            try {
+                ClothSystem* cloth = dynamic_cast<ClothSystem*>(system);
+                picker->resetPicking(*cloth);
+            } catch(...) {
             }
+
             camera.MouseRelease(x,y);
             g_mousePressed = false;
         }
@@ -326,7 +323,7 @@ namespace
             glPopMatrix();
         }
 
-        // picker->drawInfo(); // Debug ray picks
+        // picker->drawInfo(); // Debug ray directions
 
         // Dump the image to the screen.
         glutSwapBuffers();
