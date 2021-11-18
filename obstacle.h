@@ -1,5 +1,10 @@
+#ifndef OBSTACLE_H
+#define OBSTACLE_H
+
 #include <vecmath.h>
 #include "particleSystem.h"
+#include "ray.h"
+#include "pickInfo.h"
 
 #ifdef _WIN32
 #include "GL/freeglut.h"
@@ -20,6 +25,7 @@ class Sphere:public Obstacle
 
     bool collides(ParticleSystem* particleSystem);
     void draw();
+    bool intersect(const Ray& ray, PickInfo& info, float tmin);
 
     protected:
 	    Vector3f pos;
@@ -28,3 +34,5 @@ class Sphere:public Obstacle
     private:
         float r_sqr;
 };
+
+#endif //OBSTACLE_H

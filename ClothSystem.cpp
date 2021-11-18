@@ -8,6 +8,19 @@ ClothSystem::ClothSystem(int w, int h)  : w(w), h(h) {
 	visNormals = false;
 	ccw = true;
 	angle = 0.f;
+
+	for (int r = 0; r < h - 1; r++) {
+		for (int c = 0; c < w - 1; c++) {  // Init per quad
+			// Indices
+			int topLeft = r*w + c;
+			int topRight = topLeft + 1;
+			int botLeft = (r + 1)*w + c;
+			int botRight = botLeft + 1;
+
+			indices.push_back(Vector3f(topLeft, botLeft, botRight));
+			indices.push_back(Vector3f(topLeft, botRight, topRight));
+		}
+	}
 }
 
 Vector3f ClothSystem::initPos() {

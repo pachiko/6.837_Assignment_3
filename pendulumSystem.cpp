@@ -103,7 +103,7 @@ vector<Vector3f> PendulumSystem::evalF(vector<Vector3f> state)
 				springForces += -(sp.stiffness)*(norm - sp.restLength)*d.normalized();
 			}
 
-			Vector3f accel = (springForces + gravity + drag)/pInfo.mass;
+			Vector3f accel = (springForces + gravity + drag + pInfo.externalForce)/pInfo.mass;
 			f.push_back(state[2*i + 1]);
 			f.push_back(accel);
 		} else {
