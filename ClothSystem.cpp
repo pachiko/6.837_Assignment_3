@@ -102,13 +102,14 @@ void ClothSystem::drawLines() {
 	glColor4f(1, 1, 1, 1);
 	glLineWidth(1);
 	glBegin(GL_LINES);
-	for (auto spring: springCollection) {
+	for (auto& spring: springCollection) {
 		if (spring.isFlex) continue;
 		int p1 = spring.p1;
 		int p2 = spring.p2;
 
-		Vector3f pos1 = getState()[2*p1];
-		Vector3f pos2 = getState()[2*p2];
+		const vector<Vector3f>& states = getState();
+		const Vector3f& pos1 = states[2*p1];
+		const Vector3f& pos2 = states[2*p2];
 		glVertex3f(pos1[0], pos1[1], pos1[2]);
 		glVertex3f(pos2[0], pos2[1], pos2[2]);
 	}
@@ -117,7 +118,7 @@ void ClothSystem::drawLines() {
 }
 
 void ClothSystem::drawTriangles() {
-	vector<Vector3f> st = getState();
+	const vector<Vector3f>& st = getState();
 	vector<Vector3f> normals((w - 1)*(h - 1), Vector3f::ZERO); // normals of a quad
 
 	glPushAttrib(GL_ALL_ATTRIB_BITS);
@@ -141,10 +142,10 @@ void ClothSystem::drawTriangles() {
 			Vector3f nBotRight = calcNormal(r + 1, c + 1, st, normals);
 
 			// Vertices
-			Vector3f pTopLeft = st[2*topLeft];
-			Vector3f pTopRight = st[2*topRight];
-			Vector3f pBotLeft = st[2*botLeft];
-			Vector3f pBotRight = st[2*botRight];
+			const Vector3f& pTopLeft = st[2*topLeft];
+			const Vector3f& pTopRight = st[2*topRight];
+			const Vector3f& pBotLeft = st[2*botLeft];
+			const Vector3f& pBotRight = st[2*botRight];
 
 			glBegin(GL_TRIANGLES);
 			glNormal3fv(nTopLeft); glVertex3fv(pTopLeft);
@@ -179,7 +180,7 @@ void ClothSystem::drawTriangles() {
 
 Vector3f ClothSystem::calcNormal(int r, int c, const vector<Vector3f>& st, vector<Vector3f>& normals) {
 	Vector3f n;
-	Vector3f p = st[2*(r*w + c)];
+	const Vector3f& p = st[2*(r*w + c)];
 
 	bool hasLeft = c > 0;
 	bool hasRight = c < w - 1;
@@ -188,16 +189,16 @@ Vector3f ClothSystem::calcNormal(int r, int c, const vector<Vector3f>& st, vecto
 	bool hasBot = r < h - 1;
 
 	if (hasRight) {
-		Vector3f right = st[2*(r*w + c + 1)];
+		const Vector3f& right = st[2*(r*w + c + 1)];
 		if (hasTop) {
 			n += normals[(r - 1)*(w - 1) + c];
 
-			// Vector3f top = st[2*((r - 1)*w + c)];
+			// const Vector3f& top = st[2*((r - 1)*w + c)];
 			// Vector3f northEast = Vector3f::cross(right - p, top - p).normalized();
 			// n += northEast;
 		}
 		if (hasBot) {
-			Vector3f bot = st[2*((r + 1)*w + c)];
+			const Vector3f& bot = st[2*((r + 1)*w + c)];
 			Vector3f southEast = Vector3f::cross(bot - p, right - p).normalized();
 			n += southEast;
 			normals[r*(w - 1) + c] = southEast;
@@ -205,18 +206,18 @@ Vector3f ClothSystem::calcNormal(int r, int c, const vector<Vector3f>& st, vecto
 	}
 
 	if (hasLeft) {
-		Vector3f left = st[2*(r*w + c - 1)];
+		// const Vector3f& left = st[2*(r*w + c - 1)];
 		if (hasTop) {
 			n += normals[(r - 1)*(w - 1) + (c - 1)];
 
-			// Vector3f top = st[2*((r - 1)*w + c)];
+			// const Vector3f& top = st[2*((r - 1)*w + c)];
 			// Vector3f northWest = Vector3f::cross(top - p, left - p).normalized();
 			// n += northWest;
 		}
 		if (hasBot) {
 			n += normals[r*(w - 1) + (c - 1)];
 
-			// Vector3f bot = st[2*((r + 1)*w + c)];
+			// const Vector3f& bot = st[2*((r + 1)*w + c)];
 			// Vector3f southWest = Vector3f::cross(left - p, bot - p).normalized();
 			// n += southWest;
 		}
@@ -226,12 +227,12 @@ Vector3f ClothSystem::calcNormal(int r, int c, const vector<Vector3f>& st, vecto
 }
 
 void ClothSystem::sweepFixedPoints(float h) {
-	vector<Vector3f> st = getState();
+	vector<Vector3f>& st = getState();
 	int f1 = 0;
 	int f2 = w - 1;
 
-	Vector3f p1 = st[2*f1];
-	Vector3f p2 = st[2*f2];
+	const Vector3f& p1 = st[2*f1];
+	const Vector3f& p2 = st[2*f2];
 
 	Vector3f m = (p1 + p2)/2.f;
 
@@ -251,5 +252,5 @@ void ClothSystem::sweepFixedPoints(float h) {
 	st[2*f1] = (t1*Vector4f(p1, 1.f)).xyz();
 	st[2*f2] = (t1*Vector4f(p2, 1.f)).xyz();
 
-	setState(st);
+	// setState(st);
 }

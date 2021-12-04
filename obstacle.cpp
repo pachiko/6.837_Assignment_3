@@ -40,11 +40,11 @@ void Sphere::draw() {
 
 bool Sphere::collides(ParticleSystem* particleSystem) {
 	bool res = false;
-	vector<Vector3f> states = particleSystem->getState();
+	vector<Vector3f>& states = particleSystem->getState();
 
 	for (int i = 0; i < particleSystem->m_numParticles; i++) {
 		int idx = 2*i;
-		Vector3f particlePos = states[idx];
+		const Vector3f& particlePos = states[idx];
 		Vector3f diff = particlePos - pos;
 		if (Vector3f::dot(diff, diff) < r_sqr) {
 			if (!res) res = true;

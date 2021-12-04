@@ -28,7 +28,7 @@ public:
 	// Move fixed points
 	virtual void sweepFixedPoints(float h);
 
-	const vector<Vector3f> &getTriIndices() { return indices; }
+	const vector<Vector3f>& getTriIndices() { return indices; }
 
 protected:
 	int w, h;

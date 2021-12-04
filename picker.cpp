@@ -29,13 +29,13 @@ bool ClothPicker::tryPick(Camera& cam, ClothSystem& cloth, Obstacle& obstacle, i
     int i = 0;
 
     // Contains particle pos.
-    vector<Vector3f> st = cloth.getState();
+    const vector<Vector3f>& st = cloth.getState();
 
-    for (auto idx : cloth.getTriIndices()) {
+    for (auto& idx : cloth.getTriIndices()) {
         // Particle pos
-        Vector3f a = st[2*idx.x()];
-        Vector3f b = st[2*idx.y()];
-        Vector3f c = st[2*idx.z()];
+        const Vector3f& a = st[2*idx.x()];
+        const Vector3f& b = st[2*idx.y()];
+        const Vector3f& c = st[2*idx.z()];
 
         // Triangle with index
         Triangle tri(a, b, c, i);

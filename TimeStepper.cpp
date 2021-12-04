@@ -3,7 +3,7 @@
 
 ///TODO: implement Explicit Euler time integrator here
 void ForwardEuler::takeStep(ParticleSystem* particleSystem, float stepSize) {
-    vector<Vector3f> state = particleSystem->getState(); // X(t)
+    vector<Vector3f>& state = particleSystem->getState(); // X(t)
     vector<Vector3f> f = particleSystem->evalF(state); // f(X, t)
 
     vector<Vector3f> newState(state.size()); // X(t + h)
@@ -16,7 +16,7 @@ void ForwardEuler::takeStep(ParticleSystem* particleSystem, float stepSize) {
 
 ///TODO: implement Trapzoidal rule here
 void Trapzoidal::takeStep(ParticleSystem* particleSystem, float stepSize) {
-    vector<Vector3f> state = particleSystem->getState(); // X(t)
+    vector<Vector3f>& state = particleSystem->getState(); // X(t)
     vector<Vector3f> f0 = particleSystem->evalF(state); // f(X, t), f0
 
     vector<Vector3f> state1(state.size());

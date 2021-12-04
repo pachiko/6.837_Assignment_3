@@ -44,7 +44,7 @@ class PendulumSystem: public ParticleSystem
 public:
 	using ParticleSystem::ParticleSystem; // inherit constructors; C++ 11
 
-	vector<Vector3f> evalF(vector<Vector3f> state);
+	vector<Vector3f> evalF(const vector<Vector3f>& state);
 
 	void initState();    // overrides ParticleSystem::initState
 	

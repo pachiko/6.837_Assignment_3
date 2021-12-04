@@ -78,21 +78,21 @@ void PendulumSystem::initState()
 
 // TODO: implement evalF
 // for a given state, evaluate f(X,t)
-vector<Vector3f> PendulumSystem::evalF(vector<Vector3f> state)
+vector<Vector3f> PendulumSystem::evalF(const vector<Vector3f>& state)
 {
 	vector<Vector3f> f;
 
 	// YOUR CODE HERE
 	for (int i = 0; i < m_numParticles; i++) {
 		if (fixedPoints.find(i) == fixedPoints.end()) {
-			ParticleInfo pInfo = particleInfos[i];
+			const ParticleInfo& pInfo = particleInfos[i];
 			Vector3f gravity = pInfo.mass*g; // m[i]*g
 			Vector3f drag = -pInfo.dragConstant*state[2*i + 1]; // -k[i]*v[i]
 
 			Vector3f springForces;
-			vector<int> springs = connectedSprings[i];
+			const vector<int>& springs = connectedSprings[i];
 			for (auto j : springs) {
-				Spring sp = springCollection[j];
+				const Spring& sp = springCollection[j];
 				bool isP1 = (sp.p1 == i);
 
 				Vector3f d = isP1? state[2*(sp.p1)] - state[2*(sp.p2)] :
@@ -122,8 +122,9 @@ void PendulumSystem::draw()
     GLfloat testParticleColor[] = {0.f, 1.f, 0.f, 1.0f};
     glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, testParticleColor);
 
+	const vector<Vector3f> states = getState();
 	for (int i = 0; i < m_numParticles; i++) {
-		Vector3f pos = getState()[2*i]; // position of particle i. YOUR CODE HERE
+		const Vector3f& pos = states[2*i]; // position of particle i. YOUR CODE HERE
 		glPushMatrix();
 		glTranslatef(pos[0], pos[1], pos[2]);
 		glutSolidSphere(0.075f, 10.0f, 10.0f);
