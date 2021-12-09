@@ -16,13 +16,13 @@ bool ClothPicker::tryPick(Camera& cam, ClothSystem& cloth, Obstacle& obstacle, i
     info.o = o;
     info.dir = dir;
 
-    try {
     // Intersect with sphere first.
     // All subsequent triangles need to be in front to be valid.
-        Sphere& sphere = dynamic_cast<Sphere&>(obstacle);
+    try {
+        // Cannot check if null-reference; throws an error if cant dynamic cast
+        Sphere& sphere{dynamic_cast<Sphere&>(obstacle)};
         sphere.intersect(r, info, 0.f);
-    } catch(...) {
-    }
+    } catch(...) {}
 
     // Return value and index counter
     bool res = false;

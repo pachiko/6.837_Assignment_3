@@ -1,14 +1,8 @@
 #include "ClothSystem.h"
 
 
-ClothSystem::ClothSystem(int w, int h)  : w(w), h(h) {
+ClothSystem::ClothSystem(int w, int h) : w(w), h(h) {
 	m_numParticles = w*h;
-	sweepMovement = false;
-	wireMesh = false;
-	visNormals = false;
-	ccw = true;
-	angle = 0.f;
-
 	for (int r = 0; r < h - 1; r++) {
 		for (int c = 0; c < w - 1; c++) {  // Init per quad
 			// Indices
@@ -33,7 +27,7 @@ void ClothSystem::setFixedPoints() {
 }
 
 void ClothSystem::addParticleInfo(int idx) {
-	particleInfos.push_back(ParticleInfo(0.1f));
+	particleInfos.push_back(ParticleInfo{0.1f});
 }
 
 void ClothSystem::addSprings(int idx) {

@@ -57,14 +57,12 @@ namespace
     if (timeStepper != 0) {
         timeStepper->takeStep(system, h);
 
-        try {
-            ClothSystem* cloth = dynamic_cast<ClothSystem*>(system);
+        if (ClothSystem* cloth = dynamic_cast<ClothSystem*>(system)) {
             if (cloth->sweepMovement) {
                 cloth->sweepFixedPoints(h);
             }
-        } catch(...) {
-            std::cout << "Failed to cast system" << std::endl;
         }
+ 
         obstacle->collides(system);
     }
   }
@@ -137,26 +135,20 @@ namespace
             break;
         }
         case 's': {
-            try {
-                ClothSystem* cloth = dynamic_cast<ClothSystem*>(system);
+            if (ClothSystem* cloth = dynamic_cast<ClothSystem*>(system)) {
                 cloth->sweepMovement = !(cloth->sweepMovement);
-            } catch(...) {
             }
             break;
         }
         case 'w': {
-            try {
-                ClothSystem* cloth = dynamic_cast<ClothSystem*>(system);
+            if (ClothSystem* cloth = dynamic_cast<ClothSystem*>(system)) {
                 cloth->wireMesh = !(cloth->wireMesh);
-            } catch(...) {
             }
             break;
         }
         case 'n': {
-            try {
-                ClothSystem* cloth = dynamic_cast<ClothSystem*>(system);
+            if (ClothSystem* cloth = dynamic_cast<ClothSystem*>(system)) {
                 cloth->visNormals = !(cloth->visNormals);
-            } catch(...) {
             }
             break;
         }
@@ -188,11 +180,9 @@ namespace
             switch (button)
             {
             case GLUT_LEFT_BUTTON:
-                try {
-                    ClothSystem* cloth = dynamic_cast<ClothSystem*>(system);
-                    if (picker->tryPick(camera, *cloth, *obstacle, x, y)) break;
-                } catch(...) {
-                }
+                if (ClothSystem* cloth = dynamic_cast<ClothSystem*>(system))
+                    if (picker->tryPick(camera, *cloth, *obstacle, x, y))
+                        break;
                 camera.MouseClick(Camera::LEFT, x, y);
                 break;
             case GLUT_MIDDLE_BUTTON:
@@ -206,12 +196,9 @@ namespace
         }
         else
         {
-            try {
-                ClothSystem* cloth = dynamic_cast<ClothSystem*>(system);
+            if (ClothSystem* cloth = dynamic_cast<ClothSystem*>(system)) {
                 picker->resetPicking(*cloth);
-            } catch(...) {
             }
-
             camera.MouseRelease(x,y);
             g_mousePressed = false;
         }
@@ -222,10 +209,8 @@ namespace
     void motionFunc(int x, int y)
     {
         if (picker->hasPicked()) {
-            try {
-                ClothSystem* cloth = dynamic_cast<ClothSystem*>(system);
+            if (ClothSystem* cloth = dynamic_cast<ClothSystem*>(system)) {
                 picker->update(camera, *cloth, x, y);
-            } catch(...) {
             }
         } else {
             camera.MouseDrag(x,y);

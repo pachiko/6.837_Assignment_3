@@ -16,7 +16,7 @@ void PendulumSystem::setFixedPoints() {
 }
 
 void PendulumSystem::addParticleInfo(int idx) {
-	particleInfos.push_back(ParticleInfo(0.2f));
+	particleInfos.push_back(ParticleInfo{0.2f});
 }
 
 void PendulumSystem::addSprings(int idx) {
@@ -30,7 +30,7 @@ void PendulumSystem::addStructuralSpring(int idx) {
 }
 
 void PendulumSystem::genericAddSpring(int p1, int p2, float restLength, float stiffness, bool isFlex) {
-	Spring sp = Spring(p1, p2, restLength, stiffness, isFlex);
+	Spring sp{p1, p2, restLength, stiffness, isFlex};
 	int springIdx = springCollection.size();
 	connectedSprings[p1].push_back(springIdx);
 	connectedSprings[p2].push_back(springIdx);

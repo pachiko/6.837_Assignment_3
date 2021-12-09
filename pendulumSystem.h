@@ -14,29 +14,20 @@
 #include "particleSystem.h"
 
 // static gravitational acceleration
-static const Vector3f g = Vector3f(0.f, -9.8f, 0.f);
+static const Vector3f g(0.f, -9.8f, 0.f);
 
 struct Spring {
-	int p1;
-	int p2;
-	float restLength;
-	float stiffness;
-	bool isFlex;
-
-	Spring(int p1, int p2, float restLength, float stiffness, bool isFlex=false) :
-	p1(p1), p2(p2), restLength(restLength), stiffness(stiffness), isFlex(isFlex) {
-	}
+	int p1{}; // Debug build will auto init if MSVC, but not release
+	int p2{};
+	float restLength{};
+	float stiffness{};
+	bool isFlex=false;
 };
 
 struct ParticleInfo {
-	float mass;
-	float dragConstant;
+	float mass=0.1f;
+	float dragConstant=0.1f;
 	Vector3f externalForce;
-
-	// mass of a tennis ball around 60g
-	ParticleInfo(float mass=0.1f, float dragConstant=0.1f, Vector3f force=Vector3f::ZERO) :
-	mass(mass), dragConstant(dragConstant), externalForce(force) {
-	}
 };
 
 class PendulumSystem: public ParticleSystem

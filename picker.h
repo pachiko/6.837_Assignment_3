@@ -8,7 +8,7 @@
 class ClothPicker {
 public:
     ClothPicker(float str=1.f) : strength(str) {
-        picked = false; // ONLY GLOBALS DEFAULT TO FALSE
+        // picked = false; // ONLY GLOBALS DEFAULT TO FALSE
      }
 
     // getter
@@ -27,7 +27,7 @@ public:
 
 private:
     // Picked anything?
-    bool picked;
+    bool picked = false;
 
     // Pick information
     PickInfo info;

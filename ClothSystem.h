@@ -19,11 +19,11 @@ public:
 
 	void draw();
 
-	bool sweepMovement;
+	bool sweepMovement = false;
 
-	bool wireMesh;
+	bool wireMesh = false;
 
-	bool visNormals;
+	bool visNormals = false;
 
 	// Move fixed points
 	virtual void sweepFixedPoints(float h);
@@ -38,8 +38,8 @@ protected:
 	vector<Vector3f> indices;
 
 	// CCW rotation?
-	bool ccw;
-	float angle;
+	bool ccw = false;
+	float angle = 0.f;
 
 	Vector3f initPos();
 
