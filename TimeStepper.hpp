@@ -23,6 +23,10 @@ class Trapzoidal:public TimeStepper
   void takeStep(ParticleSystem* particleSystem, float stepSize);
 };
 
+class RungeKutta4:public TimeStepper {
+  void takeStep(ParticleSystem* particleSystem, float stepSize);
+};
+
 /////////////////////////
 
 //Provided

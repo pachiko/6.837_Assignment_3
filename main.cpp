@@ -42,7 +42,8 @@ namespace
     // system = new PendulumSystem(4);
     system = new ClothSystem(8, 8);
     system->initState();
-    timeStepper = new RK4();		
+    timeStepper = new RK4();
+    // timeStepper = new RungeKutta4();	// SLOW!	
     obstacle = new Sphere(4.f*Vector3f::RIGHT - Vector3f::FORWARD, 3.0f);
     picker = new ClothPicker(2.5f);
   }
