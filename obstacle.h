@@ -15,7 +15,7 @@
 class Obstacle {
     public:
 	    virtual bool collides(ParticleSystem* particleSystem)=0;
-        virtual void draw() = 0;
+        virtual void draw() const = 0;
 };
 
 class Sphere:public Obstacle
@@ -24,8 +24,8 @@ class Sphere:public Obstacle
         Sphere(Vector3f pos, float r);
 
     bool collides(ParticleSystem* particleSystem);
-    void draw();
-    bool intersect(const Ray& ray, PickInfo& info, float tmin);
+    void draw() const;
+    bool intersect(const Ray& ray, PickInfo& info, float tmin) const;
 
     protected:
 	    Vector3f pos;

@@ -12,7 +12,7 @@ public:
      }
 
     // getter
-    bool hasPicked() { return picked; }
+    bool hasPicked() const { return picked; }
 
     // Try to pick. True if successful.
     bool tryPick(Camera& cam, ClothSystem& cloth, Obstacle& obstacle, int x, int y);
@@ -23,7 +23,7 @@ public:
     // Reset when done picking.
     void resetPicking(ClothSystem& cloth);
 
-    void drawInfo();
+    void drawInfo() const;
 
 private:
     // Picked anything?

@@ -8,7 +8,7 @@ Sphere::Sphere(Vector3f pos, float r) : pos(pos), r(r) {
 }
 
 
-bool Sphere::intersect(const Ray& ray, PickInfo& info, float tmin) {
+bool Sphere::intersect(const Ray& ray, PickInfo& info, float tmin) const {
 	bool res = false;
 
 	Vector3f o_c = ray.getOrigin() - pos; // o - c
@@ -30,7 +30,7 @@ bool Sphere::intersect(const Ray& ray, PickInfo& info, float tmin) {
 }
 
 
-void Sphere::draw() {
+void Sphere::draw() const {
 	glPushMatrix();
 	glTranslatef(pos[0], pos[1], pos[2]);
 	glutSolidSphere(r, r*10.0f, r*10.0f);
@@ -55,6 +55,6 @@ bool Sphere::collides(ParticleSystem* particleSystem) {
 		}
 	}
 	
-	if (res) particleSystem->setState(states);
+	// if (res) particleSystem->setState(states);
     return res;
 }

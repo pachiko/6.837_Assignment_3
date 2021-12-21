@@ -52,7 +52,7 @@ bool ClothPicker::tryPick(Camera& cam, ClothSystem& cloth, Obstacle& obstacle, i
     return picked = res;
 }
 
-void ClothPicker::drawInfo() { // Rotate to see it! But only rotatable if not picked...
+void ClothPicker::drawInfo() const { // Rotate to see it! But only rotatable if not picked...
     if (info.dir != Vector3f::ZERO && info.o != Vector3f::ZERO) {
         glPushAttrib(GL_ALL_ATTRIB_BITS);
         glDisable(GL_LIGHTING); 

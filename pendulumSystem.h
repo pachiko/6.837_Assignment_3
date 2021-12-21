@@ -35,22 +35,22 @@ class PendulumSystem: public ParticleSystem
 public:
 	using ParticleSystem::ParticleSystem; // inherit constructors; C++ 11
 
-	vector<Vector3f> evalF(const vector<Vector3f>& state);
+	vector<Vector3f> evalF(const vector<Vector3f>& state) const;
 
 	void initState();    // overrides ParticleSystem::initState
 	
-	virtual void draw();
+	virtual void draw() const;
 
 	// make sure the receiver is reference if you want to edit
-	vector<ParticleInfo>& getParticleInfos(){ return particleInfos; }; 
+	vector<ParticleInfo>& getParticleInfos() { return particleInfos; }; 
 	
 protected:
 	// NB: Whatever methods that need to be implemented in derived classes should be virtual
 	// because main.cpp uses a pointer to a ParticleSystem (the base class) to hold the current system.
 
 	// Initial position and velocity
-	virtual Vector3f initPos();
-	virtual Vector3f initVelocity();
+	virtual Vector3f initPos() const;
+	virtual Vector3f initVelocity() const;
 
 	// Set fixed points of the system
 	virtual void setFixedPoints();
@@ -68,8 +68,8 @@ protected:
 	void genericAddSpring(int p1, int p2, float restLength, float stiffness, bool isFlex=false);
 
 	// update initial pos and velocity of each particle during initState
-	virtual void updatePos(int idx, Vector3f& pos);
-	virtual void updateVelocity(int idx, Vector3f& velocity);
+	virtual void updatePos(int idx, Vector3f& pos) const;
+	virtual void updateVelocity(int idx, Vector3f& velocity) const;
 
 	// mass and drag constant for each particle. Not used if particle idx in fixedPoint
 	vector<ParticleInfo> particleInfos;

@@ -261,7 +261,7 @@ void Camera::DistanceZoom(int x, int y)
 }
 
 // Vector to pixel x, y in camera space
-Vector3f Camera::pixelDirection(int x, int y) {
+Vector3f Camera::pixelDirection(int x, int y) const {
     // compute "distance" of image plane (wrt projection matrix)
     // IMAGE PLANE IS NOT NEAR PLANE! so d != nearZ
     float d = -float(mViewport[3])/2.0f / tan(mPerspective[0]*M_PI / 180.0f / 2.0f);

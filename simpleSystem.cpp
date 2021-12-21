@@ -11,7 +11,7 @@ void SimpleSystem::initState()
 
 // TODO: implement evalF
 // for a given state, evaluate f(X,t)
-vector<Vector3f> SimpleSystem::evalF(const vector<Vector3f>& state)
+vector<Vector3f> SimpleSystem::evalF(const vector<Vector3f>& state) const
 {
 	vector<Vector3f> f;
 	// YOUR CODE HERE
@@ -21,7 +21,7 @@ vector<Vector3f> SimpleSystem::evalF(const vector<Vector3f>& state)
 }
 
 // render the system (ie draw the particles)
-void SimpleSystem::draw()
+void SimpleSystem::draw() const
 {
 	const vector<Vector3f>& states = getState();
 	const Vector3f& pos = states[0]; // YOUR PARTICLE POSITION

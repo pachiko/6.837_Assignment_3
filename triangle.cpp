@@ -1,6 +1,6 @@
 #include "triangle.h"
 
-bool Triangle::intersect(const Ray& ray, PickInfo& info, float tmin) {
+bool Triangle::intersect(const Ray& ray, PickInfo& info, float tmin) const {
     //  Moller-Trumbore
 
     Vector3f s = ray.getOrigin() - a;

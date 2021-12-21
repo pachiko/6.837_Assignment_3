@@ -17,7 +17,7 @@ public:
 	 a(a), e1(b - a), e2(c - a), idx(idx) {
 	}
 
-	bool intersect(const Ray& ray, PickInfo& info, float tmin);
+	bool intersect(const Ray& ray, PickInfo& info, float tmin) const;
 
 protected:
 	Vector3f a, e1, e2;

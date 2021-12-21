@@ -21,9 +21,9 @@ public:
 
 	void initState();    // overrides ParticleSystem::initState
 
-	vector<Vector3f> evalF(const vector<Vector3f>& state);
+	vector<Vector3f> evalF(const vector<Vector3f>& state) const;
 	
-	void draw();
+	void draw() const;
 	
 };
 

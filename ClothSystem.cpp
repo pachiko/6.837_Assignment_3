@@ -17,7 +17,7 @@ ClothSystem::ClothSystem(int w, int h) : w(w), h(h) {
 	}
 }
 
-Vector3f ClothSystem::initPos() {
+Vector3f ClothSystem::initPos() const{
 	return Vector3f::RIGHT + h*Vector3f::UP;
 }
 
@@ -68,7 +68,7 @@ void ClothSystem::addFlexSpring(int idx) {
 	}
 }
 
-void ClothSystem::updatePos(int idx, Vector3f& pos) {
+void ClothSystem::updatePos(int idx, Vector3f& pos) const {
 	if ((idx % w) != (w - 1)) {
 		pos += Vector3f::RIGHT; 
 	} else {
@@ -76,11 +76,11 @@ void ClothSystem::updatePos(int idx, Vector3f& pos) {
 	}
 }
 
-void ClothSystem::updateVelocity(int idx, Vector3f& velocity) {
+void ClothSystem::updateVelocity(int idx, Vector3f& velocity) const {
 	return;
 }
 
-void ClothSystem::draw()
+void ClothSystem::draw() const
 {
 	if (wireMesh) {
     	PendulumSystem::draw();
@@ -90,13 +90,13 @@ void ClothSystem::draw()
 	}
 }
 
-void ClothSystem::drawLines() {
+void ClothSystem::drawLines() const {
 	glPushAttrib(GL_ALL_ATTRIB_BITS);
 	glDisable(GL_LIGHTING); 
 	glColor4f(1, 1, 1, 1);
 	glLineWidth(1);
 	glBegin(GL_LINES);
-	for (auto& spring: springCollection) {
+	for (const auto& spring: springCollection) {
 		if (spring.isFlex) continue;
 		int p1 = spring.p1;
 		int p2 = spring.p2;
@@ -111,7 +111,7 @@ void ClothSystem::drawLines() {
 	glPopAttrib();
 }
 
-void ClothSystem::drawTriangles() {
+void ClothSystem::drawTriangles() const{
 	const vector<Vector3f>& st = getState();
 	vector<Vector3f> normals((w - 1)*(h - 1), Vector3f::ZERO); // normals of a quad
 
@@ -172,7 +172,7 @@ void ClothSystem::drawTriangles() {
 	glPopAttrib();
 }
 
-Vector3f ClothSystem::calcNormal(int r, int c, const vector<Vector3f>& st, vector<Vector3f>& normals) {
+Vector3f ClothSystem::calcNormal(int r, int c, const vector<Vector3f>& st, vector<Vector3f>& normals) const {
 	Vector3f n;
 	const Vector3f& p = st[2*(r*w + c)];
 

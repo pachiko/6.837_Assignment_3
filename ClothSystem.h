@@ -17,7 +17,7 @@ class ClothSystem: public PendulumSystem
 public:
 	ClothSystem(int i, int j);
 
-	void draw();
+	void draw() const;
 
 	bool sweepMovement = false;
 
@@ -28,7 +28,7 @@ public:
 	// Move fixed points
 	virtual void sweepFixedPoints(float h);
 
-	const vector<Vector3f>& getTriIndices() { return indices; }
+	const vector<Vector3f>& getTriIndices() const { return indices; }
 
 protected:
 	int w, h;
@@ -41,11 +41,11 @@ protected:
 	bool ccw = false;
 	float angle = 0.f;
 
-	Vector3f initPos();
+	Vector3f initPos() const;
 
 	// update initial pos and velocity of each particle during initState
-	void updatePos(int idx, Vector3f& pos);
-	void updateVelocity(int idx, Vector3f& velocity);
+	void updatePos(int idx, Vector3f& pos) const;
+	void updateVelocity(int idx, Vector3f& velocity) const;
 
 	void setFixedPoints();
 
@@ -60,13 +60,13 @@ protected:
 	void addShearSpring(int idx);
 
 	// draw lines for springs
-	void drawLines();
+	void drawLines() const;
 
 	// draw triangle mesh
-	void drawTriangles();
+	void drawTriangles() const;
 
 	// Calculate normal
-	Vector3f calcNormal(int r, int c, const vector<Vector3f>& st, vector<Vector3f>& normals);
+	Vector3f calcNormal(int r, int c, const vector<Vector3f>& st, vector<Vector3f>& normals) const;
 };
 
 

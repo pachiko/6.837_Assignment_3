@@ -16,15 +16,19 @@ public:
 	int m_numParticles;
 	
 	// for a given state, evaluate derivative f(X,t)
-	virtual vector<Vector3f> evalF(const vector<Vector3f>& state) = 0;
+	virtual vector<Vector3f> evalF(const vector<Vector3f>& state) const = 0;
 	
 	// getter method for the system's state
 	vector<Vector3f>& getState(){ return m_vVecState; };
+	// The const version of the function will be called on any const objects, 
+	// and the non-const version will be called on any non-const objects:
+	// Also, methods that are const and call getState() will also call the const-version
+	const vector<Vector3f>& getState() const { return m_vVecState; }; 
 	
 	// setter method for the system's state
 	void setState(const vector<Vector3f>& newState) { m_vVecState = newState; };
 	
-	virtual void draw() = 0;
+	virtual void draw() const = 0;
 
 	virtual void initState() = 0;
 	

@@ -57,7 +57,7 @@ public:
     // const float* const GetPerspective() { return mPerspective; }
 
     // Get pixel direction vector in camera space
-    Vector3f pixelDirection(int x, int y);
+    Vector3f pixelDirection(int x, int y) const;
 
 private:
 

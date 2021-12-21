@@ -2,11 +2,11 @@
 #include <iostream>
 
 
-Vector3f PendulumSystem::initPos() {
+Vector3f PendulumSystem::initPos() const {
 	return Vector3f::RIGHT + m_numParticles*Vector3f::UP;
 }
 
-Vector3f PendulumSystem::initVelocity() {
+Vector3f PendulumSystem::initVelocity() const {
 	return Vector3f();
 }
 
@@ -37,11 +37,11 @@ void PendulumSystem::genericAddSpring(int p1, int p2, float restLength, float st
 	springCollection.push_back(sp);
 }
 
-void PendulumSystem::updatePos(int idx, Vector3f& pos) {
+void PendulumSystem::updatePos(int idx, Vector3f& pos) const {
 	pos += -Vector3f::RIGHT;
 }
 
-void PendulumSystem::updateVelocity(int idx, Vector3f& velocity) {
+void PendulumSystem::updateVelocity(int idx, Vector3f& velocity) const {
 	if (idx == 0) {
 		velocity = 2.f*Vector3f::RIGHT - *Vector3f::UP;
 		return;
@@ -78,7 +78,7 @@ void PendulumSystem::initState()
 
 // TODO: implement evalF
 // for a given state, evaluate f(X,t)
-vector<Vector3f> PendulumSystem::evalF(const vector<Vector3f>& state)
+vector<Vector3f> PendulumSystem::evalF(const vector<Vector3f>& state) const
 {
 	vector<Vector3f> f;
 
@@ -117,12 +117,12 @@ vector<Vector3f> PendulumSystem::evalF(const vector<Vector3f>& state)
 }
 
 // render the system (ie draw the particles)
-void PendulumSystem::draw()
+void PendulumSystem::draw() const
 {
     GLfloat testParticleColor[] = {0.f, 1.f, 0.f, 1.0f};
     glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, testParticleColor);
 
-	const vector<Vector3f> states = getState();
+	const vector<Vector3f>& states = getState();
 	for (int i = 0; i < m_numParticles; i++) {
 		const Vector3f& pos = states[2*i]; // position of particle i. YOUR CODE HERE
 		glPushMatrix();
