@@ -3,7 +3,7 @@
 #include "triangle.h"
 
 
-bool ClothPicker::tryPick(Camera& cam, ClothSystem& cloth, Obstacle& obstacle, int x, int y) {
+bool ClothPicker::tryPick(const Camera& cam, const ClothSystem& cloth, const Obstacle& obstacle, int x, int y) {
     // x is positive to the right, y is positive downwards
     Matrix4f invView = cam.viewMatrix().inverse();
 
@@ -20,7 +20,7 @@ bool ClothPicker::tryPick(Camera& cam, ClothSystem& cloth, Obstacle& obstacle, i
     // All subsequent triangles need to be in front to be valid.
     try {
         // Cannot check if null-reference; throws an error if cant dynamic cast
-        Sphere& sphere{dynamic_cast<Sphere&>(obstacle)};
+        const Sphere& sphere{dynamic_cast<const Sphere&>(obstacle)};
         sphere.intersect(r, info, 0.f);
     } catch(...) {}
 
@@ -31,7 +31,7 @@ bool ClothPicker::tryPick(Camera& cam, ClothSystem& cloth, Obstacle& obstacle, i
     // Contains particle pos.
     const vector<Vector3f>& st = cloth.getState();
 
-    for (auto& idx : cloth.getTriIndices()) {
+    for (const auto& idx : cloth.getTriIndices()) {
         // Particle pos
         const Vector3f& a = st[2*idx.x()];
         const Vector3f& b = st[2*idx.y()];
@@ -66,7 +66,7 @@ void ClothPicker::drawInfo() const { // Rotate to see it! But only rotatable if 
     }
 }
 
-void ClothPicker::update(Camera& cam, ClothSystem& cloth, int x, int y) {
+void ClothPicker::update(const Camera& cam, ClothSystem& cloth, int x, int y) {
     Matrix4f view = cam.viewMatrix();
     Vector3f pickPos = (view * Vector4f(info.pos, 1.f)).xyz();
 
@@ -80,7 +80,7 @@ void ClothPicker::update(Camera& cam, ClothSystem& cloth, int x, int y) {
     delta *= strength;
     // delta *= exp(delta.abs()); // unstable (explode)
 
-    Vector3f idx = cloth.getTriIndices()[info.idx];
+    const Vector3f& idx = cloth.getTriIndices()[info.idx];
     vector<ParticleInfo>& pInfos = cloth.getParticleInfos();
     for (int i = 0; i < 3; i++) {
         Vector3f force = info.barycentric[i]*delta;
