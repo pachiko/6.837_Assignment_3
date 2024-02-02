@@ -1,6 +1,6 @@
 # 6.837_Assignment_3
 
-
+Cloth Simulation
 
 https://user-images.githubusercontent.com/42316301/142432408-c78588b9-586a-4cb2-99a9-d16dfc6bc5c6.mp4
 
