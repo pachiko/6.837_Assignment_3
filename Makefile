@@ -1,7 +1,9 @@
-INCFLAGS  = -I vecmath/include
+INCFLAGS  = -I /usr/include/vecmath
 INCFLAGS += -I /usr/include/GL
 
 LINKFLAGS = -L. -lRK4 -lglut -lGL -lGLU
+LINKFLAGS += -L /usr/local/lib -lvecmath
+
 CFLAGS    = -g -Wall -no-pie
 CC        = g++
 SRCS      = $(wildcard *.cpp)
