@@ -1,13 +1,13 @@
 INCFLAGS  = -I /usr/include/vecmath
-INCFLAGS += -I /usr/include/GL
 
-LINKFLAGS = -L. -lRK4 -lglut -lGL -lGLU
-LINKFLAGS += -L /usr/local/lib -lvecmath
+LINKFLAGS = -lglut -lGL -lGLU
+LINKFLAGS += -lvecmath
+# Local archive
+LINKFLAGS += -L . -lRK4
 
 CFLAGS    = -g -Wall -no-pie
 CC        = g++
 SRCS      = $(wildcard *.cpp)
-SRCS     += $(wildcard vecmath/src/*.cpp)
 OBJS      = $(SRCS:.cpp=.o)
 PROG      = a3
 
